@@ -10,7 +10,7 @@ namespace DroneModelTest
         /// <summary>
         /// Уникальный ID дрона
         /// </summary>
-        public Guid Guid { get; init; } = Guid.NewGuid();
+        public Guid Guid { get; init; }
 
         /// <summary>
         /// В каком состоянии находится дрон
@@ -32,11 +32,13 @@ namespace DroneModelTest
         /// </summary>
         MovementService MovementService { get; set; }
 
-        public Drone(float radius,
+        public Drone(Guid guid,
+                     float radius,
                      Vector3 startPosition,
                      IEnumerable<DroneTrajectoryPartProperties> trajectoryProperties,
                      IEnumerable<Drone> dronesInCurrentSimulation)
         {
+            Guid = guid;
             Radius = radius;
 
             var trajectoryParts = trajectoryProperties.Select(prop => new LineTrajectoryPart
