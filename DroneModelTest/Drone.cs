@@ -12,6 +12,9 @@ namespace DroneModelTest
         /// </summary>
         public Guid Guid { get; init; } = Guid.NewGuid();
 
+        /// <summary>
+        /// В каком состоянии находится дрон
+        /// </summary>
         public DroneStatus Status { get; private set; } = DroneStatus.Normal;
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace DroneModelTest
         {
             Radius = radius;
 
-            var trajectoryParts = trajectoryProperties.Select((prop, i) => new LineTrajectoryPart
+            var trajectoryParts = trajectoryProperties.Select(prop => new LineTrajectoryPart
             {
                 EndPoint = prop.EndPoint,
                 InitialVelocityModule = prop.InitialVelocityModule,
@@ -46,19 +49,27 @@ namespace DroneModelTest
             MovementService = new MovementService(startPosition, trajectoryParts);
         }
 
+        /// <summary>
+        /// Обновить состояние элемента моделирования
+        /// </summary>
         public void Update()
         {
             var isDroneMoved = MovementService.Move();
 
             if (!isDroneMoved || MovementService.IsEnded)
             {
-                Status = DroneStatus.Ended;
+                Status = DroneStatus.Finished;
             }
         }
     }
 
+    /// <summary>
+    /// Представляет статус состояния дрона в каждый момент времени
+    /// </summary>
     public enum DroneStatus
     {
-        Normal, Ended, Crushed
+        Normal,   // Обычное состояние
+        Finished, // Прохождение по маршруту завершено
+        Crushed   // Дрон столкнулся
     }
 }

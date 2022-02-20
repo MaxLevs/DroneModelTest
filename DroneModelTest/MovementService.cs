@@ -44,6 +44,7 @@ namespace DroneModelTest
         /// <summary>
         /// Переместиться по маршруту на один шаг
         /// </summary>
+        /// <param name="t">Сколько времени двигаться на этом шаге</param>
         /// <returns></returns>
         public bool Move()
         {
@@ -63,6 +64,7 @@ namespace DroneModelTest
                 }
             }
 
+            // Векторные уравнения ускоренного движения с dt = 1
             Velocity += Acceleration;
             Position += Velocity;
 
