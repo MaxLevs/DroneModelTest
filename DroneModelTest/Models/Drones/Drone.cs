@@ -1,6 +1,9 @@
-﻿using System.Numerics;
+﻿using DroneModelTest.Models;
+using DroneModelTest.Models.Drones.Trajectories;
+using DroneModelTest.Services;
+using System.Numerics;
 
-namespace DroneModelTest
+namespace DroneModelTest.Models.Drones
 {
     /// <summary>
     /// Представляет дрона, проходящего некий маршрут

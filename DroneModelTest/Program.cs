@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Text;
-using DroneModelTest;
+using DroneModelTest.Models;
+using DroneModelTest.Services;
 
 ReportService reportService = new();
 

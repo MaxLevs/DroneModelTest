@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace DroneModelTest
+namespace DroneModelTest.Models
 {
     /// <summary>
     /// Представляет конфигурацию дрона

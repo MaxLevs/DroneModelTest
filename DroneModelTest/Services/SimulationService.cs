@@ -1,11 +1,13 @@
-﻿using System;
+﻿using DroneModelTest.Models;
+using DroneModelTest.Models.Drones;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DroneModelTest
+namespace DroneModelTest.Services
 {
     /// <summary>
     /// Сервис, занимающийся проведением симуляции
@@ -31,7 +33,7 @@ namespace DroneModelTest
             InitialProperties = dronesProperties;
             ListOfSimulatedDrones = new List<Drone>();
             ListOfSimulatedDrones.AddRange(InitialProperties.Select(properties => new Drone(properties.Guid,
-                                                                                            properties.Radius, 
+                                                                                            properties.Radius,
                                                                                             properties.StartPosition,
                                                                                             properties.TrajectoryProperties ?? Enumerable.Empty<DroneTrajectoryPartProperties>(),
                                                                                             ListOfSimulatedDrones))
@@ -46,7 +48,7 @@ namespace DroneModelTest
         /// <returns>Результаты симуляции</returns>
         public SimulationResult StartSimulation()
         {
-            while(ListOfSimulatedDrones.Any(drone => drone.Status == DroneStatus.Normal))
+            while (ListOfSimulatedDrones.Any(drone => drone.Status == DroneStatus.Normal))
             {
                 IterationCount++;
                 Update();

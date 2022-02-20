@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace DroneModelTest
+namespace DroneModelTest.Models.Drones.Trajectories
 {
     /// <summary>
     /// Представляет некий кусок траектории

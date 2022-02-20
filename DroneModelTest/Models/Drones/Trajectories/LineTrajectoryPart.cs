@@ -1,6 +1,7 @@
-﻿using System.Numerics;
+﻿using DroneModelTest.Services;
+using System.Numerics;
 
-namespace DroneModelTest
+namespace DroneModelTest.Models.Drones.Trajectories
 {
     public class LineTrajectoryPart : ITrajectoryPart
     {

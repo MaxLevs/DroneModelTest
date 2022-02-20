@@ -1,10 +1,12 @@
-﻿using System;
+﻿using DroneModelTest.Models;
+using DroneModelTest.Models.Drones;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DroneModelTest
+namespace DroneModelTest.Services
 {
     /// <summary>
     /// Сервис предоставления отчетов о проведенных симуляцих в разных форматах
@@ -17,13 +19,13 @@ namespace DroneModelTest
         /// <param name="result">Результаты симуляции</param>
         public void ReportToConsole(SimulationResult result)
         {
-            StringBuilder reportBuilder = new ();
+            StringBuilder reportBuilder = new();
 
             reportBuilder.AppendLine($"Console report for Simulation [{result.Guid}]");
             reportBuilder.AppendLine($"Number of iterations {result.Iterations}");
             reportBuilder.Append("Has crushed drones: ");
 
-            if(result.PerIterationResults?.Any(iterationResult => iterationResult.DroneSnapshots?.Any(drone => drone.Status == DroneStatus.Crushed) ?? false) ?? false)
+            if (result.PerIterationResults?.Any(iterationResult => iterationResult.DroneSnapshots?.Any(drone => drone.Status == DroneStatus.Crushed) ?? false) ?? false)
             {
                 reportBuilder.AppendLine("YES");
             }

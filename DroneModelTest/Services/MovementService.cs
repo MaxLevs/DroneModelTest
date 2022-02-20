@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using DroneModelTest.Models.Drones.Trajectories;
+using System.Collections;
 using System.Numerics;
 
-namespace DroneModelTest
+namespace DroneModelTest.Services
 {
     public class MovementService
     {
@@ -14,7 +15,8 @@ namespace DroneModelTest
 
         public bool IsEnded
         {
-            get { 
+            get
+            {
                 if (!_trajectory.Any())
                 {
                     return true;

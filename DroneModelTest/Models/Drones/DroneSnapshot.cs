@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DroneModelTest
+namespace DroneModelTest.Models.Drones
 {
     public class DroneSnapshot
     {

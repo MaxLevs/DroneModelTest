@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DroneModelTest.Models.Drones;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DroneModelTest
+namespace DroneModelTest.Services
 {
     public class SnapshotProducerService
     {
