@@ -4,42 +4,42 @@ using DroneModelTest;
 
 List<Drone> drones = new();
 
-drones.Add(new Drone(15, Vector3.Zero, new List<DroneTrajectoryPartProperty>
+drones.Add(new Drone(15, Vector3.Zero, new List<DroneTrajectoryPartProperties>
 {
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = new Vector3(x: 0, y: 100, z: 0),
         InitialVelocityModule = 5,
     },
 
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = new Vector3(x: 100, y: 100, z: 0),
         InitialVelocityModule = 5,
     },
 
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = Vector3.Zero,
         InitialVelocityModule = 5,
     },
 }, drones));
 
-drones.Add(new Drone(30, new Vector3(x: -50, y: 100, z: 0), new List<DroneTrajectoryPartProperty>
+drones.Add(new Drone(30, new Vector3(x: -50, y: 100, z: 0), new List<DroneTrajectoryPartProperties>
 {
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = new Vector3(x: 0, y: 100, z: 0),
         InitialVelocityModule = 10,
     },
 
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = new Vector3(x: 100, y: 100, z: 0),
         InitialVelocityModule = 10,
     },
 
-    new DroneTrajectoryPartProperty
+    new DroneTrajectoryPartProperties
     {
         EndPoint = Vector3.Zero,
         InitialVelocityModule = 10,

@@ -34,7 +34,7 @@ namespace DroneModelTest
 
         public Drone(float radius,
                      Vector3 startPosition,
-                     IEnumerable<DroneTrajectoryPartProperty> trajectoryProperties,
+                     IEnumerable<DroneTrajectoryPartProperties> trajectoryProperties,
                      IEnumerable<Drone> dronesInCurrentSimulation)
         {
             Radius = radius;
