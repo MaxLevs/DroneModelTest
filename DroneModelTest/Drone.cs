@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace DroneModelTest
 {
@@ -11,6 +11,8 @@ namespace DroneModelTest
         /// Уникальный ID дрона
         /// </summary>
         public Guid Guid { get; init; } = Guid.NewGuid();
+
+        public DroneStatus Status { get; private set; } = DroneStatus.Normal;
 
         /// <summary>
         /// Радиус, определяющий область, в которой находится дрон
@@ -27,7 +29,10 @@ namespace DroneModelTest
         /// </summary>
         MovementService MovementService { get; set; }
 
-        public Drone(float radius, Vector3 startPosition, IEnumerable<DroneTrajectoryPartProperty> trajectoryProperties)
+        public Drone(float radius,
+                     Vector3 startPosition,
+                     IEnumerable<DroneTrajectoryPartProperty> trajectoryProperties,
+                     IEnumerable<Drone> dronesInCurrentSimulation)
         {
             Radius = radius;
 
@@ -41,9 +46,19 @@ namespace DroneModelTest
             MovementService = new MovementService(startPosition, trajectoryParts);
         }
 
-        public bool Update()
+        public void Update()
         {
-            return MovementService.Move();
+            var isDroneMoved = MovementService.Move();
+
+            if (!isDroneMoved || MovementService.IsEnded)
+            {
+                Status = DroneStatus.Ended;
+            }
         }
+    }
+
+    public enum DroneStatus
+    {
+        Normal, Ended, Crushed
     }
 }

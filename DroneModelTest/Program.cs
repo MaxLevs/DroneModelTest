@@ -2,7 +2,9 @@
 using System.Text;
 using DroneModelTest;
 
-var drone1 = new Drone(15, Vector3.Zero, new List<DroneTrajectoryPartProperty>
+List<Drone> drones = new();
+
+drones.Add(new Drone(15, Vector3.Zero, new List<DroneTrajectoryPartProperty>
 {
     new DroneTrajectoryPartProperty
     {
@@ -21,41 +23,58 @@ var drone1 = new Drone(15, Vector3.Zero, new List<DroneTrajectoryPartProperty>
         EndPoint = Vector3.Zero,
         InitialVelocityModule = 5,
     },
-});
+}, drones));
 
-var drone2 = new Drone(30, new Vector3(x: -50, y: 100, z: 0), new List<DroneTrajectoryPartProperty>
+drones.Add(new Drone(30, new Vector3(x: -50, y: 100, z: 0), new List<DroneTrajectoryPartProperty>
 {
     new DroneTrajectoryPartProperty
     {
         EndPoint = new Vector3(x: 0, y: 100, z: 0),
-        InitialVelocityModule = 5,
+        InitialVelocityModule = 10,
     },
 
     new DroneTrajectoryPartProperty
     {
         EndPoint = new Vector3(x: 100, y: 100, z: 0),
-        InitialVelocityModule = 5,
+        InitialVelocityModule = 10,
     },
 
     new DroneTrajectoryPartProperty
     {
         EndPoint = Vector3.Zero,
-        InitialVelocityModule = 5,
+        InitialVelocityModule = 10,
     },
-});
+}, drones));
 
-void PrintDroneStatus(Drone drone, int iterationId)
+void PrintDroneStatus(Drone drone)
 {
-    Console.WriteLine("{0} Drone[{1}]: Position={2} Vel={3} Accel={4}", iterationId, drone.Guid, drone.Position.ToString("F2"), drone.Velocity.Length(), drone.Acceleration.Length());
+    Console.WriteLine("Drone[{0}]: Position={1} Vel={2} Accel={3}", drone.Guid, drone.Position.ToString("F2"), drone.Velocity.Length(), drone.Acceleration.Length());
 }
 
-PrintDroneStatus(drone1, 0);
-PrintDroneStatus(drone2, 0);
+Console.WriteLine("Дано:");
+foreach (var drone in drones)
+{
+    PrintDroneStatus(drone);
+}
+Console.WriteLine();
 
 int iteration = 0;
-while(drone1.Update() || drone2.Update())
+
+while(drones.Select(drone => drone.Status).Any(status => status == DroneStatus.Normal))
 {
     ++iteration;
-    PrintDroneStatus(drone1, iteration);
-    PrintDroneStatus(drone2, iteration);
+
+    Console.WriteLine($"Итерация: {iteration}");
+
+    foreach (var drone in drones)
+    {
+        drone.Update();
+    }
+
+    foreach (var drone in drones)
+    {
+        PrintDroneStatus(drone);
+    }
+
+    Console.WriteLine();
 }

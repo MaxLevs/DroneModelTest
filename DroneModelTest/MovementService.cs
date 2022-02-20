@@ -12,6 +12,24 @@ namespace DroneModelTest
         public Vector3 Velocity { get; private set; }
         public Vector3 Acceleration { get; private set; }
 
+        public bool IsEnded
+        {
+            get { 
+                if (!_trajectory.Any())
+                {
+                    return true;
+                }
+
+                if (_currentSegmentId == -1)
+                {
+                    return false;
+                }
+
+                return _currentSegmentId + 1 == _trajectory.Count
+                    && _trajectory[_currentSegmentId].IsEnded(Position);
+            }
+        }
+
         public MovementService(Vector3 startPosition)
         {
             Position = startPosition;
