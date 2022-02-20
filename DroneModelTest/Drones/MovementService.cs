@@ -88,6 +88,8 @@ namespace DroneModelTest
                 // Проверяем доступность следующего по счету участка маршрута
                 if (_trajectory.Count <= _currentSegmentId + 1)
                 {
+                    Velocity = Vector3.Zero;
+                    Acceleration = Vector3.Zero;
                     return false;
                 }
 
@@ -101,6 +103,8 @@ namespace DroneModelTest
                 // Если участок маршрута уже считается завершенным, то берем следующий
                 if (currentSegment.IsEnded(Position))
                 {
+                    Velocity = Vector3.Zero;
+                    Acceleration = Vector3.Zero;
                     continue;
                 }
 

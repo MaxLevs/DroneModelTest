@@ -52,8 +52,22 @@ List<DroneProperties> dronesProperties = new()
 
 SimulationService simulation = new(dronesProperties);
 
-void PrintDroneStatus(Drone drone)
+var results = simulation.StartSimulation().OrderBy(res => res.Iteration);
+
+foreach (var result in results)
 {
-    Console.WriteLine("Drone[{0}]: Position={1} Vel={2} Accel={3}", drone.Guid, drone.Position.ToString("F2"), drone.Velocity.Length(), drone.Acceleration.Length());
+    Console.WriteLine($"Iteration: {result.Iteration}");
+
+    foreach (var droneSnapshot in result.DroneSnapshots)
+    {
+        PrintDroneStatus(droneSnapshot);
+    }
+
+    Console.WriteLine();
+}
+
+void PrintDroneStatus(DroneSnapshot drone)
+{
+    Console.WriteLine("Drone[{0}]: Status={1} Position={2} Vel={3} Accel={4}", drone.Guid, drone.Status, drone.Position.ToString("F2"), drone.Velocity.Length(), drone.Acceleration.Length());
 }
 
