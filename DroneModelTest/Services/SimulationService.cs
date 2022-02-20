@@ -14,16 +14,19 @@ namespace DroneModelTest
     {
         private readonly SnapshotProducerService _snapshotService;
 
+        public Guid Guid { get; } = Guid.NewGuid();
+
         public IEnumerable<DroneProperties> InitialProperties { get; }
         public List<Drone> ListOfSimulatedDrones { get; }
-        public List<SimulationIterationResult> IterationResults { get; }
-
         public int IterationCount { get; private set; }
+        private List<SimulationResultItem> PerIterationResults { get; init; }
 
         public SimulationService(IEnumerable<DroneProperties> dronesProperties)
         {
             _snapshotService = new SnapshotProducerService();
+
             IterationCount = 0;
+            PerIterationResults = new List<SimulationResultItem>();
 
             InitialProperties = dronesProperties;
             ListOfSimulatedDrones = new List<Drone>();
@@ -34,12 +37,14 @@ namespace DroneModelTest
                                                                                             ListOfSimulatedDrones))
                                                             .ToList());
 
-            IterationResults = new List<SimulationIterationResult>();
-
             SaveIterationResult();
         }
 
-        public IEnumerable<SimulationIterationResult> StartSimulation()
+        /// <summary>
+        /// Начать симуляцию
+        /// </summary>
+        /// <returns>Результаты симуляции</returns>
+        public SimulationResult StartSimulation()
         {
             while(ListOfSimulatedDrones.Any(drone => drone.Status == DroneStatus.Normal))
             {
@@ -47,9 +52,16 @@ namespace DroneModelTest
                 Update();
             }
 
-            return IterationResults;
+            return new SimulationResult
+            {
+                Guid = Guid,
+                PerIterationResults = PerIterationResults
+            };
         }
 
+        /// <summary>
+        /// Провести шаг симуляции
+        /// </summary>
         private void Update()
         {
             foreach (var drone in ListOfSimulatedDrones)
@@ -60,9 +72,12 @@ namespace DroneModelTest
             SaveIterationResult();
         }
 
+        /// <summary>
+        /// Сохранить текущие состояния дронов в результаты симуляции
+        /// </summary>
         private void SaveIterationResult()
         {
-            IterationResults.Add(new SimulationIterationResult
+            PerIterationResults.Add(new SimulationResultItem
             {
                 Iteration = IterationCount,
                 DroneSnapshots = _snapshotService.ProduceSnapshots(ListOfSimulatedDrones),
