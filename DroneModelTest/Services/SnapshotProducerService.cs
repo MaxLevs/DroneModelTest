@@ -1,4 +1,5 @@
-﻿using DroneModelTest.Models.Drones;
+﻿using DroneModelTest.Models;
+using DroneModelTest.Models.Drones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,15 @@ namespace DroneModelTest.Services
         public IEnumerable<DroneSnapshot> ProduceSnapshots(IEnumerable<Drone> drones)
         {
             return drones.Select(CreateSnapshot).ToList();
+        }
+
+        public CrushSnapshot ProduceCrushSnapshot(Drone drone1, Drone drone2)
+        {
+            return new CrushSnapshot
+            {
+                Drone1 = CreateSnapshot(drone1),
+                Drone2 = CreateSnapshot(drone2)
+            };
         }
     }
 }

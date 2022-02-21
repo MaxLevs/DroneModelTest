@@ -14,6 +14,7 @@ namespace DroneModelTest.Models
         public SimulationStoppingExcuse StoppingExcuse { get; init; }
         public int Iterations => PerIterationResults?.Count ?? 0;
         public IReadOnlyCollection<SimulationResultItem>? PerIterationResults { get; init; }
+        public IReadOnlyCollection<CrushSnapshot>? CrushPoints { get; init; }
     }
 
     public class SimulationResultItem

@@ -24,6 +24,7 @@ namespace DroneModelTest.Services
         public IEnumerable<DroneProperties> InitialProperties { get; }
         public List<Drone> ListOfSimulatedDrones { get; }
         private List<SimulationResultItem> PerIterationResults { get; init; }
+        private HashSet<CrushSnapshot> CrushSnapshots { get; }
 
         public SimulationService(IEnumerable<DroneProperties> dronesProperties, int maxIterationsLimit = 10000)
         {
@@ -32,6 +33,7 @@ namespace DroneModelTest.Services
             IterationCount = 0;
             MaxIterationsLimit = maxIterationsLimit;
             PerIterationResults = new List<SimulationResultItem>();
+            CrushSnapshots = new HashSet<CrushSnapshot>(CrushSnapshotComparer.Instance);
 
             InitialProperties = dronesProperties;
             ListOfSimulatedDrones = new List<Drone>();
@@ -73,7 +75,8 @@ namespace DroneModelTest.Services
                 {
                     Guid = Guid,
                     StoppingExcuse = SimulationStoppingExcuse.OutOfMaxIterations,
-                    PerIterationResults = PerIterationResults
+                    PerIterationResults = PerIterationResults,
+                    CrushPoints = CrushSnapshots
                 };
             }
 
@@ -81,7 +84,8 @@ namespace DroneModelTest.Services
             {
                 Guid = Guid,
                 StoppingExcuse = SimulationStoppingExcuse.Finished,
-                PerIterationResults = PerIterationResults
+                PerIterationResults = PerIterationResults,
+                CrushPoints = CrushSnapshots
             };
         }
 
@@ -133,9 +137,14 @@ namespace DroneModelTest.Services
                 collision.Key.SetCrushed();
             }
 
-            var some = collisions.SelectMany(collisionGroup => collisionGroup.Select(collision => new HashSet<Drone>(new List<Drone> { collisionGroup.Key, collision }, DroneEqualityComparer.Instance)))
-                                 .Distinct()
-                                 .ToList();
+            var crushSnapshots = collisions.SelectMany(collisionGroup => collisionGroup.Select(collision => new HashSet<Drone>(DroneComparer.Instance) { collisionGroup.Key, collision }))
+                                           .Distinct()
+                                           .Select(twoCollisions => _snapshotService.ProduceCrushSnapshot(twoCollisions.First(), twoCollisions.Last()));
+
+            foreach(var crushSnapshot in crushSnapshots)
+            {
+                CrushSnapshots.Add(crushSnapshot);
+            }
         }
 
         /// <summary>

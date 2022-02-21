@@ -9,7 +9,7 @@ namespace DroneModelTest.Models.Drones
     /// <summary>
     /// Представляет дрона, проходящего некий маршрут
     /// </summary>
-    public class Drone
+    public class Drone : IEquatable<Drone>
     {
         /// <summary>
         /// Уникальный ID дрона
@@ -104,11 +104,38 @@ namespace DroneModelTest.Models.Drones
             }
         }
 
+        /// <summary>
+        /// Высталяет дрону Поврежденное состояние
+        /// </summary>
         public void SetCrushed()
         {
             Status = DroneStatus.Crushed;
             MovementService.ResetVelocityAndAcceleration();
         }
+
+        public bool Equals(Drone? other)
+        {
+            return DroneComparer.Instance.Equals(this, other);
+        }
+
+        #region IEquatable members
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Drone drone)
+            {
+                return Equals(drone);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return DroneComparer.Instance.GetHashCode(this);
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -140,7 +167,7 @@ namespace DroneModelTest.Models.Drones
     /// <summary>
     /// Сравнивает двух дронов
     /// </summary>
-    public class DroneEqualityComparer : IEqualityComparer<Drone>
+    public class DroneComparer : IEqualityComparer<Drone>
     {
         public bool Equals(Drone? x, Drone? y)
         {
@@ -159,23 +186,11 @@ namespace DroneModelTest.Models.Drones
             return obj.Guid.GetHashCode();
         }
 
-        private DroneEqualityComparer()
+        private DroneComparer()
         {
 
         }
 
-        private static DroneEqualityComparer? _instance;
-        public static DroneEqualityComparer Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new DroneEqualityComparer();
-                }
-
-                return _instance;
-            }
-        }
+        public static DroneComparer Instance { get; } = new DroneComparer();
     }
 }

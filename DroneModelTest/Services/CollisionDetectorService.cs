@@ -36,7 +36,7 @@ namespace DroneModelTest.Services
         {
             var dangers = GetAllDangersFor(drone);
             return dangers.Where(anotherDrone => HasCollision(drone, anotherDrone))
-                          .ToHashSet(DroneEqualityComparer.Instance);
+                          .ToHashSet(DroneComparer.Instance);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace DroneModelTest.Services
         public IEnumerable<Drone> GetAllDangersFor(Drone drone)
         {
             return ListOfDrones.Except(new List<Drone> { drone })
-                               .ToHashSet(DroneEqualityComparer.Instance);
+                               .ToHashSet(DroneComparer.Instance);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace DroneModelTest.Services
         /// <returns>True если коллизия есть, и fasle если её нет</returns>
         private bool HasCollision(Drone drone1, Drone drone2)
         {
-            if (DroneEqualityComparer.Instance.Equals(drone1, drone2))
+            if (DroneComparer.Instance.Equals(drone1, drone2))
             {
                 throw new ArgumentException("Параметры должны быть двумя разными дронами");
             }
