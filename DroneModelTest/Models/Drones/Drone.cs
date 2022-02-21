@@ -1,6 +1,7 @@
 ﻿using DroneModelTest.Models;
 using DroneModelTest.Models.Drones.Trajectories;
 using DroneModelTest.Services;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace DroneModelTest.Models.Drones
@@ -89,12 +90,24 @@ namespace DroneModelTest.Models.Drones
                 throw new InvalidOperationException($"{nameof(Drone)}[{Guid}] is not initialized");
             }
 
+            if (Status != DroneStatus.Normal)
+            {
+                return;
+            }
+
             var isDroneMoved = MovementService.Move();
 
             if (!isDroneMoved || MovementService.IsEnded)
             {
                 Status = DroneStatus.Finished;
+                MovementService.ResetVelocityAndAcceleration();
             }
+        }
+
+        public void SetCrushed()
+        {
+            Status = DroneStatus.Crushed;
+            MovementService.ResetVelocityAndAcceleration();
         }
     }
 
@@ -122,5 +135,47 @@ namespace DroneModelTest.Models.Drones
         /// Дрон сломался
         /// </summary>
         Crushed
+    }
+
+    /// <summary>
+    /// Сравнивает двух дронов
+    /// </summary>
+    public class DroneEqualityComparer : IEqualityComparer<Drone>
+    {
+        public bool Equals(Drone? x, Drone? y)
+        {
+            if (x == null && y == null)
+            {
+                return true;
+            }
+
+            return x != null
+                && y != null
+                && x.Guid == y.Guid;
+        }
+
+        public int GetHashCode([DisallowNull] Drone obj)
+        {
+            return obj.Guid.GetHashCode();
+        }
+
+        private DroneEqualityComparer()
+        {
+
+        }
+
+        private static DroneEqualityComparer? _instance;
+        public static DroneEqualityComparer Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DroneEqualityComparer();
+                }
+
+                return _instance;
+            }
+        }
     }
 }

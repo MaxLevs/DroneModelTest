@@ -109,8 +109,6 @@ namespace DroneModelTest.Services
             return true;
         }
 
-
-
         /// <summary>
         /// Переходит к движению по следующему отрезку маршрута.
         /// Переход также влияет на Скорость и Ускорение
@@ -126,8 +124,7 @@ namespace DroneModelTest.Services
                 // Проверяем доступность следующего по счету участка маршрута
                 if (_trajectory.Count <= _currentSegmentId + 1)
                 {
-                    Velocity = Vector3.Zero;
-                    Acceleration = Vector3.Zero;
+                    ResetVelocityAndAcceleration();
                     return false;
                 }
 
@@ -141,8 +138,7 @@ namespace DroneModelTest.Services
                 // Если участок маршрута уже считается завершенным, то берем следующий
                 if (currentSegment.IsEnded(Position))
                 {
-                    Velocity = Vector3.Zero;
-                    Acceleration = Vector3.Zero;
+                    ResetVelocityAndAcceleration();
                     continue;
                 }
 
@@ -154,6 +150,12 @@ namespace DroneModelTest.Services
             }
 
             while (true);
+        }
+
+        public void ResetVelocityAndAcceleration()
+        {
+            Velocity = Vector3.Zero;
+            Acceleration = Vector3.Zero;
         }
 
 

@@ -46,6 +46,7 @@ namespace DroneModelTest.Services
                 {
                     reportBuilder.Append($"Drone[{droneSnapshot.Guid}] ");
                     reportBuilder.Append($"Status={droneSnapshot.Status} ");
+                    reportBuilder.Append($"Radius={droneSnapshot.Radius,4:F2} ");
                     reportBuilder.Append($"Position=(x: {droneSnapshot.Position.X,4:F2}, y: {droneSnapshot.Position.Y,4:F2}, z: {droneSnapshot.Position.Z,4:F2}) ");
                     reportBuilder.Append($"Velocity=(x: {droneSnapshot.Velocity.X,4:F2}, y: {droneSnapshot.Velocity.Y,4:F2}, z: {droneSnapshot.Velocity.Z,4:F2}) ");
                     reportBuilder.Append($"Acceleration=(x: {droneSnapshot.Acceleration.X,4:F2}, y: {droneSnapshot.Acceleration.Y,4:F2}, z: {droneSnapshot.Acceleration.Z,4:F2}) ");

@@ -15,6 +15,7 @@ namespace DroneModelTest.Services
     public class SimulationService
     {
         private readonly SnapshotProducerService _snapshotService;
+        private readonly CollisionDetectorService _collisionDetectorService;
 
         public Guid Guid { get; } = Guid.NewGuid();
 
@@ -42,6 +43,9 @@ namespace DroneModelTest.Services
                                                             .ToList());
 
             InitializeDrones();
+
+            _collisionDetectorService = new CollisionDetectorService(ListOfSimulatedDrones);
+
             SaveIterationResult(); // Сохраняем начальные состояния в результаты
         }
 
@@ -103,12 +107,35 @@ namespace DroneModelTest.Services
         /// </summary>
         private void Update()
         {
+            CheckCollisions();
+
             foreach (var drone in ListOfSimulatedDrones)
             {
                 drone.Update();
             }
 
+            CheckCollisions();
+
             SaveIterationResult();
+        }
+
+        private void CheckCollisions()
+        {
+            var collisions = _collisionDetectorService.GetAllCollisions();
+
+            if (!collisions.Any())
+            {
+                return;
+            }
+
+            foreach (var collision in collisions)
+            {
+                collision.Key.SetCrushed();
+            }
+
+            var some = collisions.SelectMany(collisionGroup => collisionGroup.Select(collision => new HashSet<Drone>(new List<Drone> { collisionGroup.Key, collision }, DroneEqualityComparer.Instance)))
+                                 .Distinct()
+                                 .ToList();
         }
 
         /// <summary>

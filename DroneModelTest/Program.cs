@@ -21,7 +21,7 @@ List<DroneProperties> dronesProperties = new()
             },
             new DroneTrajectoryPartProperties
             {
-                EndPoint = new Vector3(x: 100, y: 100, z: 0),
+                EndPoint = new Vector3(x: 200, y: 100, z: 0),
                 InitialVelocityModule = 5
             },
             new DroneTrajectoryPartProperties
@@ -36,12 +36,12 @@ List<DroneProperties> dronesProperties = new()
     {
         Guid = Guid.NewGuid(),
         Radius = 30,
-        StartPosition = new Vector3(x: -50, y: 100, z: 0),
+        StartPosition = new Vector3(x: -50, y: 70, z: 0),
         TrajectoryProperties = new List<DroneTrajectoryPartProperties>
         {
             new DroneTrajectoryPartProperties
             {
-                EndPoint = new Vector3(x: 100, y: 100, z: 0),
+                EndPoint = new Vector3(x: 200, y: 100, z: 0),
                 InitialVelocityModule = 5
             },
             new DroneTrajectoryPartProperties
