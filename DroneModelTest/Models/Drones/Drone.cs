@@ -18,7 +18,7 @@ namespace DroneModelTest.Models.Drones
         /// <summary>
         /// В каком состоянии находится дрон
         /// </summary>
-        public DroneStatus Status { get; private set; } = DroneStatus.Normal;
+        public DroneStatus Status { get; private set; } = DroneStatus.NotInitialized;
 
         /// <summary>
         /// Радиус, определяющий область, в которой находится дрон
@@ -55,10 +55,40 @@ namespace DroneModelTest.Models.Drones
         }
 
         /// <summary>
+        /// Prepare drone for moving
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Drone is already initialized</exception>
+        public void Initialize()
+        {
+            if (Status != DroneStatus.NotInitialized)
+            {
+                throw new InvalidOperationException($"{nameof(Drone)}[{Guid}] is already initialized");
+            }
+
+            MovementService.Initialize();
+
+            if (MovementService.IsEnded)
+            {
+                Status = DroneStatus.Finished;
+            }
+
+            else
+            {
+                Status = DroneStatus.Normal;
+            }
+        }
+
+        /// <summary>
         /// Обновить состояние элемента моделирования
         /// </summary>
+        /// <exception cref="InvalidOperationException">Drone is not initialized</exception>
         public void Update()
         {
+            if (Status == DroneStatus.NotInitialized)
+            {
+                throw new InvalidOperationException($"{nameof(Drone)}[{Guid}] is not initialized");
+            }
+
             var isDroneMoved = MovementService.Move();
 
             if (!isDroneMoved || MovementService.IsEnded)
@@ -73,8 +103,24 @@ namespace DroneModelTest.Models.Drones
     /// </summary>
     public enum DroneStatus
     {
-        Normal,   // Обычное состояние
-        Finished, // Прохождение по маршруту завершено
-        Crushed   // Дрон столкнулся
+        /// <summary>
+        /// Дрон не инициализирован
+        /// </summary>
+        NotInitialized,
+
+        /// <summary>
+        /// Обычное состояние дрона
+        /// </summary>
+        Normal,
+
+        /// <summary>
+        /// Прохождение по маршруту завершено
+        /// </summary>
+        Finished,
+
+        /// <summary>
+        /// Дрон сломался
+        /// </summary>
+        Crushed
     }
 }

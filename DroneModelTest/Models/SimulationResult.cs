@@ -1,4 +1,5 @@
 ﻿using DroneModelTest.Models.Drones;
+using DroneModelTest.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace DroneModelTest.Models
     public class SimulationResult
     {
         public Guid Guid { get; init; }
+        public SimulationStoppingExcuse StoppingExcuse { get; init; }
         public int Iterations => PerIterationResults?.Count ?? 0;
         public IReadOnlyCollection<SimulationResultItem>? PerIterationResults { get; init; }
     }

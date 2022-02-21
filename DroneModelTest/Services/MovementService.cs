@@ -6,12 +6,26 @@ namespace DroneModelTest.Services
 {
     public class MovementService
     {
+        #region Private fields
+
         private readonly List<ITrajectoryPart> _trajectory = new();
         private int _currentSegmentId = -1;
+
+        #endregion
+
+
+        #region Phisics properties
 
         public Vector3 Position { get; private set; }
         public Vector3 Velocity { get; private set; }
         public Vector3 Acceleration { get; private set; }
+
+        #endregion
+
+
+        #region Calculable properties
+
+        public bool IsInitialized => _trajectory.Count >= 0;
 
         public bool IsEnded
         {
@@ -32,6 +46,9 @@ namespace DroneModelTest.Services
             }
         }
 
+        #endregion
+
+
         public MovementService(Vector3 startPosition)
         {
             Position = startPosition;
@@ -43,20 +60,39 @@ namespace DroneModelTest.Services
             _trajectory.AddRange(trajectoryParts);
         }
 
+
+        /// <summary>
+        /// Prepare module to start moving
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Module is already initialized</exception>
+        public void Initialize()
+        {
+            if (_currentSegmentId >= 0)
+            {
+                throw new InvalidOperationException($"{nameof(MovementService)} is already initialized");
+            }
+
+            PeekNextSegment();
+        }
+
         /// <summary>
         /// Переместиться по маршруту на один шаг
         /// </summary>
-        /// <param name="t">Сколько времени двигаться на этом шаге</param>
-        /// <returns></returns>
+        /// <returns>True if move is successed, otherwise - false</returns>
+        /// <exception cref="InvalidOperationException">Module is already initialized</exception>
         public bool Move()
         {
+            if (_currentSegmentId < 0)
+            {
+                throw new InvalidOperationException($"{nameof(MovementService)} is not initialized");
+            }
+
             if (!_trajectory.Any())
             {
                 return false;
             }
 
-            if (_currentSegmentId < 0
-             || _trajectory[_currentSegmentId].IsEnded(Position))
+            if (_trajectory[_currentSegmentId].IsEnded(Position))
             {
                 var isMoveAvailable = PeekNextSegment();
 
